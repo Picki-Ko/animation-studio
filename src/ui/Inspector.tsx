@@ -12,6 +12,7 @@ import {
 import type { Project, Section } from "../types";
 import { Slider, Toggle, Group } from "./Controls";
 import { GradientEditor } from "./GradientEditor";
+import { ARROW_ANGLE_LIMIT } from "../engine/orientation";
 export type Change = (
   section: Section | "seed",
   key: string,
@@ -71,10 +72,40 @@ export const Inspector = memo(function Inspector({
         {tab === "design" && (
           <>
             <Group
-              title="Arrow geometry"
+              title="Arrow controls"
               icon={<ArrowUpRight size={15} />}
               badge="SVG"
+              initial
             >
+              {slider("arrows", "scale", "Arrow size", 0.1, 8, 0.01, "×")}
+              {slider("arrows", "density", "Arrow density", 0.3, 2, 0.01, "×")}
+              {slider(
+                "arrows",
+                "angleVariation",
+                "Angle variation",
+                0,
+                ARROW_ANGLE_LIMIT,
+                1,
+                "°",
+              )}
+              <p className="control-note">
+                Size and density are independent. Arrows gently follow folds and
+                stay within 30° of right.
+              </p>
+              {slider(
+                "arrows",
+                "rotation",
+                "Base tilt",
+                -ARROW_ANGLE_LIMIT,
+                ARROW_ANGLE_LIMIT,
+                1,
+                "°",
+              )}
+              <Toggle
+                label="Follow surface direction"
+                value={p.arrows.followSurface}
+                onChange={(v) => change("arrows", "followSurface", v)}
+              />
               <div className="source-shape">
                 <img src="./arrow.svg" alt="Original brand arrow silhouette" />
                 <div>
@@ -82,18 +113,10 @@ export const Inspector = memo(function Inspector({
                 </div>
                 <span className="status-dot" />
               </div>
-              {slider("arrows", "rotation", "Direction", 0, 360, 1, "°")}
-              {slider("arrows", "scale", "Arrow scale", 0.35, 2)}
-              {slider("arrows", "density", "Density", 0.3, 2)}
               <div className="two-controls">
                 {slider("arrows", "spacingX", "Spacing X", 0.5, 2)}
                 {slider("arrows", "spacingY", "Spacing Y", 0.4, 2)}
               </div>
-              <Toggle
-                label="Follow surface direction"
-                value={p.arrows.followSurface}
-                onChange={(v) => change("arrows", "followSurface", v)}
-              />
               {slider("arrows", "opacity", "Texture opacity")}
             </Group>
             <Group

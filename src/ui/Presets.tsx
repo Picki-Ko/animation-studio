@@ -9,7 +9,7 @@ const Thumbnail = memo(function Thumbnail({ project }: { project: Project }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const r = new Renderer(canvas.current!);
-    r.render(project, 0, 240, 145, { quality: "draft" });
+    r.render(project, 0, 240, 145, { quality: "high" });
     r.dispose();
   }, [project]);
   return <canvas ref={canvas} aria-hidden="true" />;

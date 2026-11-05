@@ -1,10 +1,12 @@
 import type { Project } from "../types";
+import { ARROW_ANGLE_LIMIT, rightFacingTilt } from "../engine/orientation";
 export const DEFAULTS: Project = {
-  version: 1,
+  version: 2,
   name: "Untitled exploration",
   seed: 24086,
   arrows: {
     rotation: 0,
+    angleVariation: 12,
     scale: 1.04,
     spacingX: 1,
     spacingY: 0.8,
@@ -157,7 +159,7 @@ export const PRESETS: Preset[] = [
   }),
   preset("ripples", "Compressed ripples", "Fine / topographic", {
     seed: 9302,
-    arrows: { density: 1.3, scale: 0.95 },
+    arrows: { density: 1.3, scale: 0.95 / 1.3 },
     surface: {
       frequency: 4.5,
       wrinkle: 0.8,
@@ -183,12 +185,12 @@ export function parseProject(input: string): Project {
   const raw = JSON.parse(input);
   if (
     !raw ||
-    raw.version !== 1 ||
+    ![1, 2].includes(raw.version) ||
     !raw.arrows ||
     !raw.surface ||
     !raw.composition
   )
-    throw new Error("Choose an Arrowfield project JSON (version 1).");
+    throw new Error("Choose an Arrowfield project JSON (version 1 or 2).");
   const result = clone(DEFAULTS);
   for (const key of Object.keys(result) as (keyof Project)[]) {
     const base = result[key];
@@ -245,6 +247,16 @@ export function parseProject(input: string): Project {
   );
   result.motion.duration = Math.max(1, Math.min(60, result.motion.duration));
   result.arrows.density = Math.max(0.3, Math.min(2, result.arrows.density));
+  // v1 sized arrows relative to grid spacing. Preserve their physical size
+  // while allowing density and size to be edited independently in v2.
+  if (raw.version === 1) result.arrows.scale /= result.arrows.density;
+  result.version = 2;
+  result.arrows.scale = Math.max(0.1, Math.min(8, result.arrows.scale));
+  result.arrows.rotation = rightFacingTilt(result.arrows.rotation);
+  result.arrows.angleVariation = Math.max(
+    0,
+    Math.min(ARROW_ANGLE_LIMIT, result.arrows.angleVariation),
+  );
   result.arrows.spacingX = Math.max(0.5, Math.min(2, result.arrows.spacingX));
   result.arrows.spacingY = Math.max(0.4, Math.min(2, result.arrows.spacingY));
   if (

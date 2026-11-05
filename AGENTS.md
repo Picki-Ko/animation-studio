@@ -2,6 +2,8 @@
 
 Keep the exact arrow coordinates and proportions in `public/arrow.svg` and `src/engine/geometry.ts`. Do not replace this geometry with icons, text, triangles, or approximate chevrons. Rotation and uniform instance scaling are permitted; nonuniform scaling is not.
 
+Arrow density and physical size must remain independent. Every rendered and exported arrow must stay within 30° of right; preserve the smooth angle bounds in `src/engine/orientation.ts`. Configuration version 2 imports version 1 with a one-time size conversion, so saved compositions retain their previous physical arrow sizes.
+
 The editor is React + TypeScript + Vite and must remain deployable as a static site under a GitHub Pages repository subpath. Keep relative asset paths. Do not introduce external rendering services or upload user images.
 
 Keep geometry, surface math, timing, gradient sampling, lighting, background processing, UI / state, and export in their current separate modules. Preview, SVG, and video must use the same deterministic surface model. Looping controls must preserve identical endpoints for fractional motion speeds. Do not base exported frames on requestAnimationFrame delivery times.

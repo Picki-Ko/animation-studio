@@ -17,6 +17,10 @@ npm run dev
 
 Choose one of six starting presets or randomize the seed while preserving your controls. The left panel sets the canvas, seed, coverage, and background color. The right inspector has Design, Motion, and Scene tabs, with collapsible controls for geometry, deformation, gradients, lights, and image layers. Background uploads accept JPG, PNG, and WebP up to 12 MB. Use the hand tool to pan, the zoom controls to inspect detail, and Fit to reset the view.
 
+**Arrow controls** opens by default in the Design tab. Arrow size and density are independent: density changes the number and spacing of instances while size changes their dimensions. Angle variation controls gentle, coherent tilt as folds animate. Base tilt sets the overall bias; every arrow remains within 30° of right across preview and all exports. Set angle variation to zero or disable Follow surface direction for uniform orientation.
+
+Project JSON version 2 saves the new angle setting and independent size semantics. Version 1 projects and browser autosaves are upgraded automatically, preserving their previous arrow sizes; legacy directions are constrained to the right-facing range.
+
 Space plays or pauses; Home returns to the first frame. Ctrl / Command Z undoes; Shift adds redo. Scrubbing uses the same deterministic timestamps as export. Preview quality changes density for responsiveness; exports always use full quality.
 
 Explorations and the latest composition are saved locally in the browser. Project → Export project JSON creates a portable configuration, including any embedded background image. Import validates and restores those settings. If image data exceeds browser storage, the status bar asks you to export JSON. Files are processed on the device; no external rendering service is used.
@@ -24,6 +28,7 @@ Explorations and the latest composition are saved locally in the browser. Projec
 ## Architecture
 
 - `src/engine/geometry.ts`: exact source polygon, uniform scaling, triangulated WebGL mesh.
+- `src/engine/orientation.ts`: smooth, surface-driven angle variation within a fixed right-facing range.
 - `src/engine/surface.ts`: seeded continuous displacement field, local orientation, depth, compression, and instancing.
 - `src/engine/timing.ts`: deterministic phase math. Fractional motion speeds blend integer temporal harmonics, preserving seamless boundaries.
 - `src/engine/gradient.ts`: whole-canvas multistop linear / radial color sampling, independent position and motion.

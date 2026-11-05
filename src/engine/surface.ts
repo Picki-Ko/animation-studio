@@ -2,6 +2,7 @@ import type { Project, Frame, Quality } from "../types";
 import { clamp, phaseAt, radians, TAU } from "./timing";
 import { gradientSampler } from "./gradient";
 import { lightSampler } from "./lighting";
+import { arrowAngle } from "./orientation";
 export interface SurfacePoint {
   x: number;
   y: number;
@@ -93,7 +94,8 @@ export function generateFrame(
   const a = p.arrows,
     c = p.composition;
   const q = quality === "draft" ? 0.66 : quality === "balanced" ? 0.85 : 1;
-  const step = Math.min(width, height) / 65 / Math.max(0.3, a.density * q);
+  const baseSize = Math.min(width, height) / 65;
+  const step = baseSize / Math.max(0.3, a.density * q);
   const stepX = step * Math.max(0.5, a.spacingX),
     stepY = step * Math.max(0.4, a.spacingY);
   const cols = Math.ceil(width / stepX) + 24,
@@ -110,7 +112,7 @@ export function generateFrame(
       const perspective = 1 + point.z * p.surface.depth * 0.12;
       const x = ((point.x - 0.5) * c.scale + c.x + 0.5) * width;
       const y = ((point.y - 0.5) * c.scale + c.y + 0.5) * height;
-      const size = step * 0.98 * a.scale * c.scale * perspective;
+      const size = baseSize * 0.98 * a.scale * c.scale * perspective;
       if (
         !unclipped &&
         (Math.abs(x / width - 0.5 - c.x) > c.coverage * 0.5 + size / width ||
@@ -130,7 +132,7 @@ export function generateFrame(
         x,
         y,
         size,
-        angle: radians(a.rotation) + (a.followSurface ? point.twist : 0),
+        angle: arrowAngle(a, point.twist),
         color: color.map((n) => clamp(n * (brightness + glow) + haze)) as [
           number,
           number,

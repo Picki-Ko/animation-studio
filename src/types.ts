@@ -4,11 +4,12 @@ export interface Stop {
   color: string;
 }
 export interface Project {
-  version: 1;
+  version: 2;
   name: string;
   seed: number;
   arrows: {
     rotation: number;
+    angleVariation: number;
     scale: number;
     spacingX: number;
     spacingY: number;
