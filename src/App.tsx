@@ -38,6 +38,9 @@ function initialProject() {
   }
 }
 export default function App() {
+  const standalone = Boolean(
+    document.querySelector('meta[name="arrowfield-standalone"]'),
+  );
   const [project, setProject] = useState(initialProject),
     pRef = useRef(project);
   pRef.current = project;
@@ -262,12 +265,18 @@ export default function App() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <a className="wordmark" href="./" aria-label="Arrowfield studio home">
+        <a
+          className="wordmark"
+          href={standalone ? "#" : "./"}
+          aria-label="Arrowfield studio home"
+        >
           <img src="./arrow.svg" alt="" />
           <span>
             arrowfield<span className="wordmark-dot">®</span>
           </span>
-          <span className="studio-badge">STUDIO</span>
+          <span className="studio-badge">
+            {standalone ? "OFFLINE" : "STUDIO"}
+          </span>
         </a>
         <div className="project-name">
           <input
@@ -312,6 +321,16 @@ export default function App() {
             </button>
             {projectMenu && (
               <div className="dropdown-menu">
+                {!standalone && (
+                  <a
+                    href="./arrowfield-studio.html"
+                    download="Arrowfield-Studio.html"
+                    onClick={() => setProjectMenu(false)}
+                  >
+                    <Download size={14} />
+                    Download tool (.html)
+                  </a>
+                )}
                 <button
                   onClick={() => {
                     download(

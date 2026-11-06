@@ -6,6 +6,8 @@ Arrow density and physical size must remain independent. Every rendered and expo
 
 The editor is React + TypeScript + Vite and must remain deployable as a static site under a GitHub Pages repository subpath. Keep relative asset paths. Do not introduce external rendering services or upload user images.
 
+Keep the single-file offline build working. `npm run build` generates `dist/arrowfield-studio.html` with all scripts, styles, and arrow artwork embedded. Run `npm run test:standalone` after building when changing assets, dependencies, packaging, or the offline download flow. Avoid adding network dependencies to the offline editor.
+
 Keep geometry, surface math, timing, gradient sampling, lighting, background processing, UI / state, and export in their current separate modules. Preview, SVG, and video must use the same deterministic surface model. Looping controls must preserve identical endpoints for fractional motion speeds. Do not base exported frames on requestAnimationFrame delivery times.
 
 Update the versioned configuration schema, defaults, import validation, and documentation when adding a control. Include all new values in saved / exported projects. Imported values must not introduce markup or unbounded render dimensions. Keep clear errors for unsupported browser codecs and memory limits. Never rename WebM data to MP4 or wrap a raster screenshot in SVG.

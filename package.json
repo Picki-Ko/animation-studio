@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/build-standalone.mjs",
     "test": "node --import tsx --test tests/*.test.ts",
+    "test:standalone": "node --test tests/standalone.test.mjs",
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {

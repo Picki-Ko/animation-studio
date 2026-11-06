@@ -13,6 +13,14 @@ npm run dev
 
 `npm run build` type-checks and produces a self-contained static site in `dist/`. `npm run preview` serves the production build.
 
+## Single HTML file
+
+The production build also writes `dist/arrowfield-studio.html`, a standalone editor with its JavaScript, CSS, and exact arrow artwork embedded. It needs no installation, local server, CDN, or internet connection. Download it from **Project → Download tool (.html)** in the hosted studio, or visit `download.html` for the download page. Open the saved `.html` file in a current desktop browser.
+
+The offline editor has the same controls, animation, and export implementations. MP4 remains dependent on browser H.264 / WebCodecs support. Browser storage is separate from the hosted editor and may behave differently for local files; use project JSON export / import to transfer a composition and background image or keep portable backups.
+
+`scripts/build-standalone.mjs` packages the Vite output without external assets. `npm run test:standalone` validates the actual built HTML after `npm run build`, including embedded geometry, JavaScript syntax / module dependencies, file references, and the download link.
+
 ## Using the studio
 
 Choose one of six starting presets or randomize the seed while preserving your controls. The left panel sets the canvas, seed, coverage, and background color. The right inspector has Design, Motion, and Scene tabs, with collapsible controls for geometry, deformation, gradients, lights, and image layers. Background uploads accept JPG, PNG, and WebP up to 12 MB. Use the hand tool to pan, the zoom controls to inspect detail, and Fit to reset the view.
